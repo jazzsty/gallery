@@ -5,7 +5,7 @@
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           <div v-for="(item, i) in state.items" :key="i" class="col">
             <!-- {{ item }} -->
-            <CardComponent :item="item" />
+            <Card :item="item" />
           </div>
         </div>
       </div>
@@ -13,14 +13,14 @@
   </div>
 </template>
 <script>
-import CardComponent from '@/components/Card.vue';
+import Card from '@/components/Card.vue';
 import axios from 'axios';
 import { reactive } from 'vue';
 
 export default {
   name: 'HomeComponent',
   components: {
-    CardComponent
+    Card
   },
   setup() {
     const state = reactive({
