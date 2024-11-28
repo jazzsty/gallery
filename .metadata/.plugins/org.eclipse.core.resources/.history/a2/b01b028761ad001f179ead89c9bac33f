@@ -1,6 +1,0 @@
-spring.application.name=backend
-
-spring.datasource.hikari.driver-class-name=org.mariadb.jdbc.Driver
-spring.datasource.hikari.url=jdbc:mariadb://localhost:3306/gallery?characterEncoding=UTF-8&serverTimezone=UTC
-spring.datasource.hikari.username=root
-spring.datasource.hikari.password=1234
