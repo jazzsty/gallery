@@ -3,7 +3,7 @@
     <div class="collapse text-bg-dark" id="navbarHeader">
       <div class="container">
         <div class="row">
-          <div class="col-sm-8 col-md-7 py-4">
+          <!-- <div class="col-sm-8 col-md-7 py-4">
             <h4>About</h4>
             <p class="text-body-secondary">
               Add some information about the album below, the author, or any other
@@ -11,13 +11,18 @@
               informative tidbits. Then, link them off to some social networking sites or
               contact information.
             </p>
-          </div>
-          <div class="col-sm-4 offset-md-1 py-4">
-            <h4>Contact</h4>
+          </div> -->
+          <div class="col-sm-4 py-4">
+            <h4>사이트맵</h4>
             <ul class="list-unstyled">
-              <li><a href="#" class="text-white">Follow on Twitter</a></li>
-              <li><a href="#" class="text-white">Like on Facebook</a></li>
-              <li><a href="#" class="text-white">Email me</a></li>
+              <li>
+                <router-link to="/" class="text-white">메인 화면</router-link>
+              </li>
+              <li>
+                <router-link to="/login" class="text-white" v-if="!$store.state.member.id">로그인</router-link>
+                <router-link to="/login" class="text-white" @click="logout()" v-else>로그아웃</router-link>
+                <!-- <a to="/login" class="text-white" @click="logout()" v-else>로그아웃</a> -->
+              </li>
             </ul>
           </div>
         </div>
@@ -63,9 +68,21 @@
 </template>
 
 <script>
+import router from '@/scripts/router';
+import store from '@/scripts/store';
+
 export default {
   name: "HeaderComponent",
-};
+  setup(){
+    const logout = () => {
+      store.commit('setMember', 0);
+      sessionStorage.removeItem("id");
+      router.push({path: "/"});
+    }
+
+    return {logout};
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

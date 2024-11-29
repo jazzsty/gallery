@@ -25,4 +25,6 @@ VALUES
     (0, 'beta', '/img/hill.jpg', 20000000, 10),
     (0, 'gamma', '/img/vincent-van-gogh.jpg', 30000000, 30);
     
+INSERT INTO members (id, email, password) VALUES (0, 'jazzsty@naver.com', '1234');
+    
 commit;

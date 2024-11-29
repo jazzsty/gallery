@@ -7,6 +7,7 @@
 <script>
 import HeaderComponent from "@/components/Header.vue";
 import FooterComponent from "@/components/Footer.vue";
+import store from "./scripts/store";
 
 export default {
   name: "App",
@@ -14,6 +15,12 @@ export default {
     HeaderComponent,
     FooterComponent,
   },
+  setup(){
+    const id = sessionStorage.getItem("id");
+    if (id) {
+      store.commit("setMember", id);
+    }
+  }
 };
 </script>
 
