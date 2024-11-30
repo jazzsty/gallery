@@ -8,6 +8,9 @@
 import HeaderComponent from "@/components/Header.vue";
 import FooterComponent from "@/components/Footer.vue";
 import store from "./scripts/store";
+import axios from "axios";
+import { useRoute } from "vue-router";
+import { watch } from "vue";
 
 export default {
   name: "App",
@@ -16,10 +19,22 @@ export default {
     FooterComponent,
   },
   setup(){
-    const id = sessionStorage.getItem("id");
-    if (id) {
-      store.commit("setMember", id);
+    // const id = sessionStorage.getItem("id");
+    // if (id) {
+    //   store.commit("setMember", id);
+    // }
+
+    const check = () => {
+      axios.get("/api/member/check").then(({data}) => {
+        console.log(data);
+        store.commit("setMember", data | 0);
+      })
     }
+
+    const route = useRoute();
+    watch(route, ()=>{
+      check();
+    })
   }
 };
 </script>
