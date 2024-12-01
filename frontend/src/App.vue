@@ -25,10 +25,12 @@ export default {
     // }
 
     const check = () => {
-      axios.get("/api/member/check").then(({data}) => {
-        console.log(data);
-        store.commit("setMember", data | 0);
-      })
+      axios.get("/api/member/check").then((res) => {
+        console.log(res.data);
+        store.commit("setMember", res.data || 0);
+      }).catch(error => {
+        console.error('Error check:', error);
+      });
     }
 
     const route = useRoute();

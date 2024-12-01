@@ -1,24 +1,22 @@
 # frontend
 
-## Project setup
-```
-npm install
-```
+vinit 설정
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+package.json 
+"rules": {
+      "vue/multi-word-component-names" : 0
+    }
 
-### Compiles and minifies for production
-```
-npm run build
-```
+vue.json
+{
+	"Generate Basic Vue Code": {
+		"prefix": "vinit",
+		"body": [
+			"<template>\n\t<div>\n\t\t\n\t</div>\n</template>\n<script>\n\texport default {\n\t\t\n\t}\n</script>\n<style>\n</style>"
+		],
+		"description": "Generate Basic Vue Code"
+	}
+}
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+정렬이 않되는것은
+<template lang=""> -> <template> 변경 하면 해결된다

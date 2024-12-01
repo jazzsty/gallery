@@ -2,11 +2,12 @@ package com.example.backend.controller;
 
 import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.query.Param;
+//import org.springframework.data.jpa.repository.JpaRepository;
+//import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,7 @@ public class CartController {
 			@PathVariable("itemId") int itemId,
 			@CookieValue(value = "token", required = false) String token
 	){
+		System.out.println("check step pushCartItem itemId:" + itemId);
 		if(!jwtService.isValid(token)) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 		}
@@ -66,5 +68,23 @@ public class CartController {
 		List<Item> items = itemRepository.findByIdIn(itemIds);
 		
 		return new ResponseEntity<>(items, HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/api/cart/items/{itemId}")
+	public ResponseEntity<Void> removeCartItem(
+			@PathVariable("itemId") int itemId,
+			@CookieValue(value = "token", required = false) String token
+	){
+		System.out.println("check step removeCartItem itemId:" + itemId);
+		if(!jwtService.isValid(token)) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+		}
+		
+		int memberId = jwtService.getId(token);
+		Cart cart = cartRepository.findByMemberIdAndItemId(memberId, itemId);
+		System.out.println("cart: " + cart);
+		cartRepository.delete(cart);
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

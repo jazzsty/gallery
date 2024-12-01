@@ -11,7 +11,9 @@
         </span>
       </p>
       <div class="d-flex justify-content-between align-items-center">
-        <button class="btn btn-primary">구입하기</button>
+        <button @click="addToCart(item.id)" class="btn btn-primary">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </button>
         <!-- <small class="text-body-secondary">{{ lib.getNumberFormatted(item.price) }}</small> -->
         <small class="price text-muted">
           {{ lib.getNumberFormatted(item.price) }}
@@ -26,6 +28,7 @@
 </template>
 <script>
 import lib from "@/scripts/lib";
+import axios from "axios";
 
 export default {
   name: "CardComponent",
@@ -33,7 +36,12 @@ export default {
     item: Object
   },
   setup() {
-    return { lib }
+    const addToCart = (itemId) => {
+      axios.post(`/api/cart/items/${itemId}`).then(() => {
+        console.log('Success!!');
+      })
+    }
+    return { lib, addToCart }
   }
 };
 </script>

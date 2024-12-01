@@ -55,7 +55,9 @@ public class MemberController {
 
 	@GetMapping("/api/member/check")
 	public ResponseEntity<Integer> check(@CookieValue(value = "token", required = false) String token) {
+		System.out.println("check step check");
 		Claims claims = jwtService.getClaims(token);
+		System.out.println("claims: " + claims);
 		if(claims != null) {
 			int id = Integer.parseInt(claims.get("id").toString());
 			return new ResponseEntity<>(id, HttpStatus.OK);
