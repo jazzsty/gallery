@@ -14,24 +14,19 @@
           <div class="col-md-5 col-lg-4 order-md-last">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
               <span class="text-primary">구입 목록</span>
-              <span class="badge bg-primary rounded-pill">3</span>
+              <span class="badge bg-primary rounded-pill">{{ state.items.length }}</span>
             </h4>
             <ul class="list-group mb-3">
-              <li
-                class="list-group-item d-flex justify-content-between lh-sm"
-                v-for="(item, idx) in state.items"
-                :key="idx"
-              >
+              <li class="list-group-item d-flex justify-content-between lh-sm" v-for="(item, idx) in state.items"
+                :key="idx">
                 <div>
                   <h6 class="my-0">{{ item.name }}</h6>
                 </div>
-                <span class="text-muted"
-                  >{{
-                    lib.getNumberFormatted(
-                      item.price - (item.price * item.discountPer) / 100
-                    )
-                  }}원</span
-                >
+                <span class="text-muted">{{
+                  lib.getNumberFormatted(
+                    item.price - (item.price * item.discountPer) / 100
+                  )
+                }}원</span>
               </li>
             </ul>
             <ul class="list-group mb-3">
@@ -39,77 +34,44 @@
                 <div>
                   <h6 class="my-0">최종 금액:</h6>
                 </div>
-                <span class="text-muted total-price"
-                  >{{ lib.getNumberFormatted(computedPrice) }}원</span
-                >
+                <span class="text-muted total-price">{{ lib.getNumberFormatted(computedPrice) }}원</span>
               </li>
             </ul>
           </div>
           <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">주문자 정보</h4>
-            <form class="needs-validation" novalidate="">
+            <div class="needs-validation" novalidate="">
               <div class="row g-3">
                 <div class="col-12">
                   <label for="username" class="form-label">이름</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    placeholder="Username"
-                    required=""
-                  />
+                  <input type="text" class="form-control" id="username" v-model="state.form.name" />
                 </div>
                 <div class="col-12">
-                  <label for="address" class="form-label">주소</label
-                  ><input
-                    type="text"
-                    class="form-control"
-                    id="address"
-                    placeholder="1234 Main St"
-                    required=""
-                    spellcheck="false"
-                    data-ms-editor="true"
-                  />
+                  <label for="address" class="form-label">주소</label><input type="text" class="form-control" id="address"
+                    v-model="state.form.address" spellcheck="false" data-ms-editor="true" />
                 </div>
               </div>
               <hr class="my-4" />
               <h4 class="mb-3">결제 수단</h4>
               <div class="my-3">
                 <div class="form-check">
-                  <input
-                    id="credit"
-                    name="paymentMethod"
-                    type="radio"
-                    class="form-check-input"
-                    checked=""
-                    required=""
-                  /><label class="form-check-label" for="credit">신용카드</label>
+                  <input id="card" name="paymentMethod" type="radio" class="form-check-input" value="card"
+                    v-model="state.form.payment" /><label class="form-check-label" for="card">신용카드</label>
                 </div>
                 <div class="form-check">
-                  <input
-                    id="debit"
-                    name="paymentMethod"
-                    type="radio"
-                    class="form-check-input"
-                    required=""
-                  /><label class="form-check-label" for="debit">무통장입금</label>
+                  <input id="bank" name="paymentMethod" type="radio" class="form-check-input" value="bank"
+                    v-model="state.form.payment" /><label class="form-check-label" for="bank">무통장입금</label>
                 </div>
               </div>
               <div class="col-12">
-                <label for="cc-name" class="form-label">카드 번호</label
-                ><input
-                  type="text"
-                  class="form-control"
-                  id="cc-name"
-                  placeholder=""
-                  required=""
-                />
+                <label for="cc-name" class="form-label">카드 번호</label><input type="text" class="form-control"
+                  id="cc-name" v-model="state.form.cardNumber" />
               </div>
               <hr class="my-4" />
-              <button class="w-100 btn btn-primary btn-lg" type="submit">
-                Continue to checkout
+              <button class="w-100 btn btn-primary btn-lg" @click="submit()">
+                결제하기
               </button>
-            </form>
+            </div>
           </div>
         </div>
       </main>
@@ -126,6 +88,13 @@ export default {
   setup() {
     const state = reactive({
       items: [],
+      form: {
+        name: "",
+        address: "",
+        payment: "",
+        cardNumber: "",
+        items: ""
+      }
     });
 
     const computedPrice = computed(() => {
@@ -138,16 +107,25 @@ export default {
       return result;
     });
 
+    const submit = () => {
+      console.log('state.items: ', JSON.stringify(state.items));
+      state.form.items = JSON.stringify(state.items);
+      axios.post("/api/orders", state.form).then((res) => {
+        console.log("res: ", res);
+        console.log("Success !!");
+      });
+    }
+
     const load = () => {
       axios.get("/api/cart/items").then((res) => {
         console.log("res: ", res.data);
         state.items = res.data;
       });
-    };
+    }
 
     load();
 
-    return { state, lib, computedPrice };
+    return { state, lib, computedPrice, submit };
   },
 };
 </script>
