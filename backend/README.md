@@ -21,9 +21,9 @@ select * from items;
 
 INSERT INTO items (id, name, img_path, price, discount_per) 
 VALUES 
-    (0, 'alpha', '/img/landscape.jpg', 10000000, 5),
-    (0, 'beta', '/img/hill.jpg', 20000000, 10),
-    (0, 'gamma', '/img/vincent-van-gogh.jpg', 30000000, 30);
+    (0, 'landscape', '/img/landscape.jpg', 10000000, 5),
+    (0, 'hill', '/img/hill.jpg', 20000000, 10),
+    (0, 'vincent-van-gogh', '/img/vincent-van-gogh.jpg', 30000000, 30);
     
 INSERT INTO members (id, email, password) VALUES (0, 'jazzsty@naver.com', '1234');
     

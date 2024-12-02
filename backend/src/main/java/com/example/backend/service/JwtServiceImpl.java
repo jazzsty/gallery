@@ -73,12 +73,12 @@ public class JwtServiceImpl implements JwtService {
 				return claims;
 			} catch (ExpiredJwtException e) {
 				// 만료됨
-				System.err.println("Token has expired: " + e.getMessage());
-//				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expired");
+				System.out.println("Token has expired: " + e.getMessage());
+				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token expired");
 			} catch (JwtException e) {
 				// 유효하지 않음
-				System.err.println("Invalid token: " + e.getMessage());
-//				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+				System.out.println("Invalid token: " + e.getMessage());
+				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
 			}
 		}
 		return null;

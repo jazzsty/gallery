@@ -11,6 +11,7 @@ import store from "./scripts/store";
 import axios from "axios";
 import { useRoute } from "vue-router";
 import { watch } from "vue";
+// import router from "./scripts/router";
 
 export default {
   name: "App",
@@ -18,26 +19,33 @@ export default {
     HeaderComponent,
     FooterComponent,
   },
-  setup(){
+  setup() {
     // const id = sessionStorage.getItem("id");
     // if (id) {
     //   store.commit("setMember", id);
     // }
 
     const check = () => {
-      axios.get("/api/member/check").then((res) => {
-        console.log(res.data);
-        store.commit("setMember", res.data || 0);
-      }).catch(error => {
-        console.error('Error check:', error);
-      });
-    }
+      axios
+        .get("/api/member/check")
+        .then((res) => {
+          console.log(res.data);
+          store.commit("setMember", res.data || 0);
+        })
+        .catch((error) => {
+          console.error("Error check:", error);
+          // router.push("/login");
+        });
+    };
 
+    // const router = useRouter();
     const route = useRoute();
-    watch(route, ()=>{
+    watch(route, () => {
       check();
-    })
-  }
+    });
+
+    // check();
+  },
 };
 </script>
 
