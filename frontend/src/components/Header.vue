@@ -14,7 +14,7 @@
               </li>
               <li>
                 <router-link to="/login" class="text-white" v-if="!$store.state.member.id">로그인</router-link>
-                <router-link to="/login" class="text-white" @click="logout()" v-else>로그아웃</router-link>
+                <router-link to="/" class="text-white" @click="logout()" v-else>로그아웃</router-link>
               </li>
             </ul>
           </div>
@@ -32,7 +32,7 @@
           </svg>
           <strong>Gallery</strong>
         </router-link>
-        <router-link to="/cart" class="cart btn">
+        <router-link to="/cart" class="cart btn" v-if="$store.state.member.id">
           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </router-link>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
@@ -47,14 +47,18 @@
 <script>
 import router from '@/scripts/router';
 import store from '@/scripts/store';
+import axios from 'axios';
 
 export default {
   name: "HeaderComponent",
   setup() {
     const logout = () => {
-      store.commit('setMember', 0);
-      sessionStorage.removeItem("id");
-      router.push({ path: "/" });
+      axios.post("/api/member/logout").then(() => {
+        store.commit('setMember', 0);
+        // sessionStorage.removeItem("id");
+        router.push({ path: "/" });
+      })
+      
     }
 
     return { logout };

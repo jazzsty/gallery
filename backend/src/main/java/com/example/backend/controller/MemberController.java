@@ -52,6 +52,19 @@ public class MemberController {
 		}
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND);
 	}
+	
+	@PostMapping("/api/member/logout")
+	public ResponseEntity<Void> login(HttpServletResponse res) {
+		System.out.println("check step login");
+		Cookie cookie = new Cookie("token", null);
+		cookie.setPath("/");
+		cookie.setMaxAge(0);
+		
+		res.addCookie(cookie);
+
+		return new ResponseEntity<>(HttpStatus.OK);
+	
+	}
 
 	@GetMapping("/api/member/check")
 	public ResponseEntity<Integer> check(@CookieValue(value = "token", required = false) String token) {

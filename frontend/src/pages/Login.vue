@@ -15,8 +15,8 @@
         </div>
 
         <div class="form-check text-start my-3">
-            <input class="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
+            <input class="form-check-input" type="checkbox">
+            <label>
                 Remember me
             </label>
         </div>
@@ -45,7 +45,7 @@ export default {
             axios.post("/api/member/login", state.form).then((res) => {
                 console.log(res);
                 store.commit('setMember', res.data);
-                sessionStorage.setItem("id", res.data);
+                // sessionStorage.setItem("id", res.data);
                 router.push({path: "/"});
                 alert("로그인하였습니다.");
             }).catch(() => {
