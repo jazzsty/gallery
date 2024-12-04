@@ -14,18 +14,23 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.backend.dto.OrderDto;
 import com.example.backend.entity.Order;
+import com.example.backend.repository.CartRepository;
 import com.example.backend.repository.OrderRepository;
 import com.example.backend.service.JwtService;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 public class OrderController {
 	
 	private final JwtService jwtService;
 	private final OrderRepository orderRepository;
+	private final CartRepository cartRepository;
 	
-	public OrderController(JwtService jwtService, OrderRepository orderRepository) {
+	public OrderController(JwtService jwtService, OrderRepository orderRepository, CartRepository cartRepository) {
 		this.jwtService = jwtService;
 		this.orderRepository = orderRepository;
+		this.cartRepository = cartRepository;
 	}
 	
 	@GetMapping("/api/orders")
@@ -36,11 +41,13 @@ public class OrderController {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 		}
 		
-		List<Order> orders = orderRepository.findAll();
+		int memberId = jwtService.getId(token);
+		List<Order> orders = orderRepository.findByMemberIdOrderByIdDesc(memberId);
 		
 		return new ResponseEntity<>(orders, HttpStatus.OK);
 	}
 	
+	@Transactional
 	@PostMapping("/api/orders")
 	public ResponseEntity<Void> pushOrder(
 			@RequestBody OrderDto dto,
@@ -50,8 +57,9 @@ public class OrderController {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
 		}
 		
+		int memberId = jwtService.getId(token);
 		Order newOrder = new Order();
-		System.out.println("memberId(): " + jwtService.getId(token));
+		System.out.println("memberId(): " + memberId);
 //		newOrder.setMemberId(dto.getMemberId());
 		newOrder.setMemberId(jwtService.getId(token));
 		newOrder.setName(dto.getName());
@@ -62,6 +70,8 @@ public class OrderController {
 //		newOrder.setUpdateAt(dto.getUpdateAt());
 		
 		orderRepository.save(newOrder);
+		
+		cartRepository.deleteByMemberId(memberId);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

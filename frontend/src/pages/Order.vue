@@ -82,6 +82,7 @@
 import axios from "axios";
 import { computed, reactive } from "vue";
 import lib from "@/scripts/lib";
+import router from "@/scripts/router";
 
 export default {
   name: "OrderComponent",
@@ -110,9 +111,13 @@ export default {
     const submit = () => {
       console.log('state.items: ', JSON.stringify(state.items));
       state.form.items = JSON.stringify(state.items);
+
       axios.post("/api/orders", state.form).then((res) => {
         console.log("res: ", res);
         console.log("Success !!");
+        
+        alert("주문 완료하였습니다.");
+        router.push("/orders");
       });
     }
 
